@@ -1,0 +1,22 @@
+services:
+  postgres-db-1:
+    environment:
+      - "POSTGRES_USER=$POSTGRES_USER"
+      - "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
+    image: "nexus.tools.atrovan.com/postgres"
+    networks:
+      - "dockernet"
+    ports:
+      - "5432:5432/tcp"
+    restart: "always"
+    volumes:
+      - "postgres_db:/var/lib/postgresql/data"
+
+volumes:
+  postgres_db:
+    driver: local
+
+networks:
+  dockernet:
+    external: true
+    name: "dockernet"
