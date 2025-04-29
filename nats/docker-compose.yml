@@ -1,0 +1,21 @@
+services:
+  nats:
+    image: focker.ir/nats:latest
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    networks:
+      - dockernet
+
+    volumes:
+      - nats_data:/data
+
+networks:
+  dockernet:
+    name: dockernet
+    external: true
+
+volumes:
+  nats_data:
+    driver: local
+
