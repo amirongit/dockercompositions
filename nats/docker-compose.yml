@@ -9,6 +9,9 @@ services:
 
     volumes:
       - nats_data:/data
+      - ./nats-server.conf:/etc/nats/nats-server.conf
+
+    command: ["-c", "/etc/nats/nats-server.conf"]
 
 networks:
   dockernet:
