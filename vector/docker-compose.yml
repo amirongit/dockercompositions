@@ -1,0 +1,17 @@
+services:
+  vector-pipeline-1:
+    image: focker.ir/timberio/vector:0.46.1-alpine
+    networks:
+      - "dockernet"
+    ports:
+      - "8686:8686"
+    volumes:
+      - "./vector.json:/etc/vector/vector.json:ro"
+      - "./resource:/resource/:ro"
+    entrypoint: "vector --config /etc/vector/vector.json"
+
+
+networks:
+  dockernet:
+    external: true
+    name: "dockernet"
