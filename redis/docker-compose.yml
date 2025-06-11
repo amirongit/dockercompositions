@@ -1,0 +1,19 @@
+services:
+  redis:
+    image: "focker.ir/redis"
+    networks:
+      - "dockernet"
+    ports:
+      - "6379:6379/tcp"
+    restart: "unless-stopped"
+    volumes:
+        - redis_data:/data
+
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  dockernet:
+    external: true
+    name: "dockernet"

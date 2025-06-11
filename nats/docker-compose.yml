@@ -11,6 +11,7 @@ services:
       - nats_data:/data
       - ./nats-server.conf:/etc/nats/nats-server.conf
 
+    restart: "unless-stopped"
     command: ["-c", "/etc/nats/nats-server.conf"]
 
 networks:

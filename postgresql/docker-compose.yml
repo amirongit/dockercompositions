@@ -1,5 +1,5 @@
 services:
-  postgres-db-1:
+  postgres:
     environment:
       - "POSTGRES_USER=$POSTGRES_USER"
       - "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
@@ -10,10 +10,10 @@ services:
       - "5432:5432/tcp"
     restart: "always"
     volumes:
-      - "postgres_db:/var/lib/postgresql/data"
+      - "postgres_data:/var/lib/postgresql/data"
 
 volumes:
-  postgres_db:
+  postgres_data:
     driver: local
 
 networks:

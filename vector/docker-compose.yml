@@ -1,5 +1,5 @@
 services:
-  vector-pipeline-1:
+  vector:
     image: focker.ir/timberio/vector:0.46.1-alpine
     networks:
       - "dockernet"
