@@ -1,6 +1,6 @@
 services:
   setup:
-    image: focker/elasticsearch:${STACK_VERSION}
+    image: focker.ir/elasticsearch:${STACK_VERSION}
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
     user: "0"
