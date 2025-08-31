@@ -1,0 +1,46 @@
+services:
+  temporal:
+    image: focker.ir/temporalio/auto-setup:${TEMPORAL_VERSION}
+    networks:
+      - dockernet
+    ports:
+      - 7233:7233
+    volumes:
+      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
+    environment:
+      - DB=postgres12
+      - DB_NAME=${DB_NAME}
+      - POSTGRES_SEEDS=postgres
+      - DB_PORT=5432
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PWD=${DB_PASSWORD}
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
+      - TEMPORAL_ADDRESS=${TEMPORAL_ADDRESS}
+      - TEMPORAL_CLI_ADDRESS=${TEMPORAL_CLI_ADDRESS}
+  admin-tools:
+    image: focker.ir/temporalio/admin-tools
+    networks:
+      - dockernet
+    depends_on:
+      - temporal
+    environment:
+      - TEMPORAL_ADDRESS=${TEMPORAL_ADDRESS}
+      - TEMPORAL_CLI_ADDRESS=${TEMPORAL_CLI_ADDRESS}
+    stdin_open: true
+    tty: true
+  ui:
+    image: focker.ir/temporalio/ui
+    networks:
+      - dockernet
+    depends_on:
+      - temporal
+    environment:
+      - TEMPORAL_ADDRESS=${TEMPORAL_ADDRESS}
+      - TEMPORAL_CORS_ORIGINS=http://localhost:3000
+    ports:
+      - 8080:8080
+
+networks:
+  dockernet:
+    external: true
+    name: "dockernet"
