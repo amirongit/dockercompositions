@@ -10,7 +10,7 @@ services:
       - "5432:5432/tcp"
     restart: "always"
     volumes:
-      - "postgres_data:/var/lib/postgresql/data"
+      - "postgres_data:/var/lib/postgresql"
 
 volumes:
   postgres_data:
