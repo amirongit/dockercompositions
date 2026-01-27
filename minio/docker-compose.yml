@@ -1,0 +1,24 @@
+services:
+  minio:
+    image: "focker.ir/minio/minio:latest"
+    volumes:
+      - minio_data:/mnt/data
+      - ./certs/:/etc/minio/certs
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - "dockernet"
+    environment:
+      - "MINIO_ROOT_USER=${MINIO_ROOT_USER}"
+      - "MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}"
+    entrypoint: "minio server /mnt/data --console-address \":9001\""
+
+volumes:
+  minio_data:
+    driver: local
+
+networks:
+  dockernet:
+    external: true
+    name: "dockernet"
