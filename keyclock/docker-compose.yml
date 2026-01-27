@@ -1,0 +1,23 @@
+services:
+  kc:
+    image: quay.io/keycloak/keycloak:26.4.7
+    ports:
+      - 8080:8080
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${KC_BOOTSTRAP_ADMIN_USERNAME}
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      - KC_DB=${KC_DB}
+      - KC_DB_URL=${KC_DB_URL}
+      - KC_DB_USERNAME=${KC_DB_USERNAME}
+      - KC_DB_PASSWORD=${KC_DB_PASSWORD}
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+    command: start-dev
+    restart: "always"
+    networks:
+      - "dockernet"
+
+networks:
+  dockernet:
+    external: true
+    name: "dockernet"
