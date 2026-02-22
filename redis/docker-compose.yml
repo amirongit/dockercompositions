@@ -1,6 +1,6 @@
 services:
   redis:
-    image: "focker.ir/redis"
+    image: focker.ir/redis
     networks:
       - "dockernet"
     ports:
