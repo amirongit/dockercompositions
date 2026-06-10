@@ -17,6 +17,7 @@ services:
       - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
       - TEMPORAL_ADDRESS=${TEMPORAL_ADDRESS}
       - TEMPORAL_CLI_ADDRESS=${TEMPORAL_CLI_ADDRESS}
+    restart: "always"
   admin-tools:
     image: focker.ir/temporalio/admin-tools
     networks:
@@ -28,6 +29,7 @@ services:
       - TEMPORAL_CLI_ADDRESS=${TEMPORAL_CLI_ADDRESS}
     stdin_open: true
     tty: true
+    restart: "always"
   ui:
     image: focker.ir/temporalio/ui
     networks:
@@ -39,6 +41,7 @@ services:
       - TEMPORAL_CORS_ORIGINS=http://localhost:3000
     ports:
       - 8080:8080
+    restart: "always"
 
 networks:
   dockernet:
