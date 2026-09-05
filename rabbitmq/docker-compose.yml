@@ -1,0 +1,23 @@
+services:
+  rabbitmq:
+    image: focker.ir/rabbitmq:management-alpine
+    ports:
+      - "5672:5671"
+      - "15672:15672"
+    environment:
+      - "RABBITMQ_DEFAULT_USER=$RABBITMQ_DEFAULT_USER"
+      - "RABBITMQ_DEFAULT_PASS=$RABBITMQ_DEFAULT_PASS"
+    restart: "always"
+    volumes:
+      - "rabbitmq_data:/var/lib/rabbitmq"
+    networks:
+      - "dockernet"
+
+volumes:
+  rabbitmq_data:
+    driver: local
+
+networks:
+  dockernet:
+    external: true
+    name: "dockernet"
