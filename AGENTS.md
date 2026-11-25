@@ -17,15 +17,13 @@ One directory per stack; the directory name **is** the stack name.
   <extra files>          # configs bind-mounted into the container(s)
 ```
 
-Existing stacks: `elasticsearch` (es + kibana + cert setup), `keyclock`, `minio`, `nats`,
+Existing stacks: `elasticsearch` (es + kibana + cert setup), `keycloak`, `minio`, `nats`,
 `nuq-postgres`, `playwright`, `postgresql`, `postgresql-pgvector`, `rabbitmq`, `redis`,
 `temporal`, `vector`.
 
 Naming quirks that are **deliberate, do not "fix"**:
 
-- `keyclock/` is misspelled (`keycloak` inside). Renaming breaks shell history and muscle memory.
 - `readme.md`, `license.txt` are lowercase.
-- `firecrawl/` holds only a local, gitignored `.env`; its compose file was removed in `461e3be`.
 
 ## Image sourcing
 
@@ -75,8 +73,7 @@ Consequences agents must keep in mind:
   committed with placeholder values (`user`, `password`, empty for optional settings).
 - Every variable referenced by compose must exist in both `.env` and `env.template` — keep the
   key sets identical when adding one.
-- Reference variables with braces, always: `${POSTGRES_USER}` (with defaults where useful:
-  `${POSTGRES_USER:-postgres}`). Bare `$VAR` is not used.
+- Reference variables with braces, always: `${POSTGRES_USER}`. Bare `$VAR` is not used.
 - Compose loads `.env` from the **project directory** (the stack dir), so always run from there,
   or pass `-f <stack>/docker-compose.yml` (the file's directory still becomes the project dir).
 - A stack only gets an `env.template` if it interpolates at least one variable (`nats`, `redis`,
