@@ -1,0 +1,69 @@
+services:
+  firecrawl:
+    image: ghcr.io/firecrawl/firecrawl:latest
+    command: ["node", "dist/src/harness.js", "--start-docker"]
+    environment:
+      - "HOST=${FC_HOST}"
+      - "PORT=${FC_PORT}"
+      - "WORKER_PORT=${FC_WORKER_PORT}"
+      - "EXTRACT_WORKER_PORT=${FC_EXTRACT_WORKER_PORT}"
+      - "POSTGRES_HOST=${POSTGRES_HOST}"
+      - "POSTGRES_PORT=${POSTGRES_PORT}"
+      - "POSTGRES_USER=${POSTGRES_USER}"
+      - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+      - "POSTGRES_DB=${POSTGRES_DB}"
+      - "USE_DB_AUTHENTICATION=${FC_USE_DB_AUTHENTICATION}"
+      - "REDIS_URL=${REDIS_URL}"
+      - "REDIS_RATE_LIMIT_URL=${REDIS_RATE_LIMIT_URL}"
+      - "NUQ_RABBITMQ_URL=${NUQ_RABBITMQ_URL}"
+      - "PLAYWRIGHT_MICROSERVICE_URL=${PLAYWRIGHT_MICROSERVICE_URL}"
+      - "NUM_WORKERS_PER_QUEUE=${FC_NUM_WORKERS_PER_QUEUE}"
+      - "CRAWL_CONCURRENT_REQUESTS=${FC_CRAWL_CONCURRENT_REQUESTS}"
+      - "MAX_CONCURRENT_JOBS=${FC_MAX_CONCURRENT_JOBS}"
+      - "BROWSER_POOL_SIZE=${FC_BROWSER_POOL_SIZE}"
+      - "HARNESS_STARTUP_TIMEOUT_MS=${FC_HARNESS_STARTUP_TIMEOUT_MS}"
+      - "ENV=${FC_ENV}"
+    networks:
+      - "dockernet"
+    ports:
+      - "3002:3002"
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+
+    restart: "unless-stopped"
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
+
+  firecrawl-mcp:
+    image: ghcr.io/firecrawl/firecrawl-mcp-server:latest
+    environment:
+      - "HTTP_STREAMABLE_SERVER=${MCP_HTTP_STREAMABLE_SERVER}"
+      - "HOST=${MCP_HOST}"
+      - "PORT=${MCP_PORT}"
+      - "FIRECRAWL_API_URL=${FIRECRAWL_API_URL}"
+      - "FIRECRAWL_MCP_ALLOWED_HOSTS=${MCP_FIRECRAWL_MCP_ALLOWED_HOSTS}"
+    ports:
+      - "3000:3000"
+    networks:
+      - dockernet
+    restart: "unless-stopped"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
+    depends_on:
+      - firecrawl
+
+networks:
+  dockernet:
+    external: true
+    name: "dockernet"
