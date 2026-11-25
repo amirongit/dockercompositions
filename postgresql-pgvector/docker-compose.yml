@@ -1,0 +1,25 @@
+services:
+  postgres:
+    build:
+      context: "."
+      dockerfile: "PGVector.Dockerfile"
+    environment:
+      - "POSTGRES_USER=$POSTGRES_USER"
+      - "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
+    image: postgres-pgvector:latest
+    networks:
+      - "dockernet"
+    ports:
+      - "5432:5432/tcp"
+    restart: "always"
+    volumes:
+      - "postgres_pgvector_data:/var/lib/postgresql"
+
+volumes:
+  postgres_pgvector_data:
+    driver: local
+
+networks:
+  dockernet:
+    external: true
+    name: "dockernet"
