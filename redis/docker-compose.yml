@@ -5,8 +5,14 @@ services:
     networks:
       - "dockernet"
     ports:
-      - "6379:6379/tcp"
+      - "6379:6379"
     restart: "unless-stopped"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     logging:
       driver: "json-file"
       options:

@@ -4,20 +4,26 @@ services:
     networks:
       - dockernet
     ports:
-      - 7233:7233
+      - "7233:7233"
     volumes:
-      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
+      - "./dynamicconfig:/etc/temporal/config/dynamicconfig:ro"
     environment:
       - DB=postgres12
       - DB_NAME=${DB_NAME}
-      - POSTGRES_SEEDS=postgres
+      - POSTGRES_SEEDS=postgresql
       - DB_PORT=5432
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PWD=${DB_PASSWORD}
       - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
       - TEMPORAL_ADDRESS=${TEMPORAL_ADDRESS}
       - TEMPORAL_CLI_ADDRESS=${TEMPORAL_CLI_ADDRESS}
-    restart: "always"
+    restart: "unless-stopped"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
   admin-tools:
     image: focker.ir/temporalio/admin-tools
     networks:
@@ -29,7 +35,13 @@ services:
       - TEMPORAL_CLI_ADDRESS=${TEMPORAL_CLI_ADDRESS}
     stdin_open: true
     tty: true
-    restart: "always"
+    restart: "unless-stopped"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
   ui:
     image: focker.ir/temporalio/ui
     networks:
@@ -40,8 +52,14 @@ services:
       - TEMPORAL_ADDRESS=${TEMPORAL_ADDRESS}
       - TEMPORAL_CORS_ORIGINS=http://localhost:3000
     ports:
-      - 8080:8080
-    restart: "always"
+      - "8080:8080"
+    restart: "unless-stopped"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
 networks:
   dockernet:

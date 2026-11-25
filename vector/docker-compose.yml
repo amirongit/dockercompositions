@@ -8,6 +8,19 @@ services:
     volumes:
       - "./vector.json:/etc/vector/vector.json:ro"
       - "./resource:/resource/:ro"
+    restart: "unless-stopped"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8686/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
     entrypoint: "vector --config /etc/vector/vector.json"
 
 

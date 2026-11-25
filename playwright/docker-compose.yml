@@ -2,13 +2,13 @@ services:
   playwright:
     image: ghcr.io/firecrawl/playwright-service:latest
     environment:
-      - "PORT=$PORT"
-      - "PROXY_SERVER=$PROXY_SERVER"
-      - "PROXY_USERNAME=$PROXY_USERNAME"
-      - "PROXY_PASSWORD=$PROXY_PASSWORD"
-      - "ALLOW_LOCAL_WEBHOOKS=$ALLOW_LOCAL_WEBHOOKS"
-      - "BLOCK_MEDIA=$BLOCK_MEDIA"
-      - "MAX_CONCURRENT_PAGES=$MAX_CONCURRENT_PAGES"
+      - "PORT=${PORT}"
+      - "PROXY_SERVER=${PROXY_SERVER}"
+      - "PROXY_USERNAME=${PROXY_USERNAME}"
+      - "PROXY_PASSWORD=${PROXY_PASSWORD}"
+      - "ALLOW_LOCAL_WEBHOOKS=${ALLOW_LOCAL_WEBHOOKS}"
+      - "BLOCK_MEDIA=${BLOCK_MEDIA}"
+      - "MAX_CONCURRENT_PAGES=${MAX_CONCURRENT_PAGES}"
     networks:
       - "dockernet"
     restart: "unless-stopped"

@@ -9,9 +9,15 @@ services:
 
     volumes:
       - nats_data:/data
-      - ./nats-server.conf:/etc/nats/nats-server.conf
+      - "./nats-server.conf:/etc/nats/nats-server.conf:ro"
 
     restart: "unless-stopped"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
     command: ["-c", "/etc/nats/nats-server.conf"]
 
 networks:

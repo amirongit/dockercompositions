@@ -50,6 +50,12 @@ services:
         until curl -s -X POST --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://es:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
         echo "All done!";
       '
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
     healthcheck:
       test: ["CMD-SHELL", "[ -f config/certs/es/es.crt ]"]
       interval: 1s
@@ -70,7 +76,7 @@ services:
     networks:
       - dockernet
     ports:
-      - ${ES_PORT}:9200
+      - "${ES_PORT}:9200"
     environment:
       - node.name=es
       - cluster.name=${CLUSTER_NAME}
@@ -89,6 +95,12 @@ services:
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.license.self_generated.type=${LICENSE}
     mem_limit: ${ES_MEM_LIMIT}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
     ulimits:
       memlock:
         soft: -1
@@ -116,7 +128,7 @@ services:
       - certs:/usr/share/kibana/config/certs
       - kibana_data:/usr/share/kibana/data
     ports:
-      - ${KIBANA_PORT}:5601
+      - "${KIBANA_PORT}:5601"
     restart: "unless-stopped"
     environment:
       - SERVERNAME=kibana
@@ -128,6 +140,12 @@ services:
       - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${ENCRYPTION_KEY}
       - XPACK_REPORTING_ENCRYPTIONKEY=${ENCRYPTION_KEY}
     mem_limit: ${KB_MEM_LIMIT}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
     healthcheck:
       test:
         [
