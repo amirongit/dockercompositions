@@ -1,13 +1,20 @@
 services:
   redis:
-    image: focker.ir/redis
+    image: focker.ir/redis:latest
+    command: redis-server --bind 0.0.0.0
     networks:
       - "dockernet"
     ports:
       - "6379:6379/tcp"
     restart: "unless-stopped"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
     volumes:
-        - redis_data:/data
+      - "redis_data:/data"
 
 volumes:
   redis_data:
